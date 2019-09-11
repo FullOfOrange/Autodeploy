@@ -7,7 +7,7 @@ const id = uuid.v4();
 const port = 20000;
 
 app.use(express.json());
-app.get('/', function(req,res) {
+app.post('/', function(req,res) {
 	res.send(req.body);
 });
 app.listen(port, function() {
