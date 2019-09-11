@@ -1,14 +1,19 @@
+
+const __PARENT_DIR = "../../";
+const fs = require('fs');
+
 const express = require('express');
-const uuid = require('uuid');
-
-
 const app = express();
-const id = uuid.v4();
 const port = 20000;
 
 app.use(express.json());
 app.post('/', function(req,res) {
-	res.send(req.body);
+	const repo = req.body.repository.name;
+	const status_dir = fs.statSync(__PARENT_DIR+repo);
+	
+	console.log(status_dir);
+
+	res.send(repo);
 });
 app.listen(port, function() {
 	console.log('ex-app listen port : '+ port);
