@@ -11,6 +11,8 @@ const PORT = 20000;
 checkDir(__repodir);
 
 app.use(express.json());
+
+//route 진행
 app.post('/', async function(req,res) {
 	res.send('send success');
 
@@ -23,7 +25,6 @@ app.post('/', async function(req,res) {
 		await bulidDocker(repo);
 		await removeDocker(repo);
 		await runDocker(repo);
-		
 		console.log('done');
 	}catch(err){
 		console.log(`something err: ${err}`);
