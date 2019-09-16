@@ -29,7 +29,7 @@ const bulidDocker = (repository) => {
  * @param {String: repository name} repository 
  */
 const runDocker = (repository) => {
-	return new Promise((resolve) => {
+	return new Promise((resolve,reject) => {
 		docker.createContainer({
 			Image:repository,
 			Tty:false,
@@ -50,16 +50,17 @@ const runDocker = (repository) => {
  * @param {String: repository name} repository 
  */
 const removeDocker = (repository) => {
-	return new Promise(async (resolve) => {
-		let id = await getContainerId(repository);
-		if(id){
-			docker.getContainer(id).stop()
-			.then((container)=>{
-				container.remove().then(() => resolve());
-			});
-		}else{
-			resolve();
-		}
+	return new Promise((resolve,reject) => {
+		getContainerId(repository).then(id => {
+			if(id){
+				docker.getContainer(id).stop()
+				.then((container)=>{
+					container.remove().then(() => resolve());
+				});
+			}else{
+				resolve();
+			}
+		});
 	});
 }
 /**
@@ -67,7 +68,7 @@ const removeDocker = (repository) => {
  * @param {String: repository name} repository 
  */
 const getContainerId = (repository) => {
-	return new Promise(resolve => {
+	return new Promise((resolve,reject) => {
 		docker.listContainers((err, containers) => {
 			if(err) {
 				reject(err);
@@ -75,7 +76,7 @@ const getContainerId = (repository) => {
 			if (containers) {
 				containers.forEach((container) => {
 					let i = container.Names.findIndex((name) => {
-						return name === `/${repository}`;
+						return name === `/ㅁ${repository}`;
 					})
 					if(i !== -1){
 						resolve(containers[i].Id)
