@@ -1,35 +1,32 @@
-const __DEPLOY_DIR = 'repos/deploy_test/'
+const { __repodir } = require('./options/global.js');
+
+const { checkDir, update } = require('./libs/repository.js');
+const { bulidDocker, runDocker } = require('./libs/docker.js');
 
 const express = require('express');
 const app = express();
 const PORT = 20000;
 
-const tar = require('tar-fs');
-const Docker = require('dockerode');
-const docker = new Docker({socketPath: '/var/run/docker.sock'});
+//최초에 레포지토리 저장용 dir을 설정합니다.
+checkDir(__repodir);
 
-const bulidDocker = () => {
-	const pack = tar.pack(__DEPLOY_DIR);
-	return new Promise(function(resolve,reject){
-		docker.buildImage(
-			pack, {t: 'login_test'}, function(err, stream) {
-			if (err) {
-				console.log(err);
-				return;
-			}
-			stream.pipe(process.stdout, {end: true});
-			stream.on('end', () => {
-				resolve('done')
-			});
-		})
-	});
-}
 app.use(express.json());
 app.post('/', async function(req,res) {
-	//const repo = req.body.repository.name;
-	//const status_dir = fs.statSync(__PARENT_DIR+repo);
-	let result = await bulidDocker();
-	res.send(result);
+	res.send('send success');
+
+	console.log('request drived',req.body.repository.full_name)
+	const request = req.body;
+	const [username,repo] = request.repository.full_name.split('/');
+	
+	try{
+		await update(__repodir,username,repo);
+		await bulidDocker(repo);
+		await runDocker(repo);
+		
+		console.log('done');
+	}catch(err){
+		console.log(`something err: ${err}`);
+	}
 });
 app.listen(PORT, function() {
 	console.log('ex-app listen port : '+ PORT);
