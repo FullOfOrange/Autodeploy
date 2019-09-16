@@ -1,7 +1,7 @@
 const { __repodir } = require('./options/global.js');
 
 const { checkDir, update } = require('./libs/repository.js');
-const { bulidDocker, runDocker } = require('./libs/docker.js');
+const { bulidDocker, removeDocker, runDocker } = require('./libs/docker.js');
 
 const express = require('express');
 const app = express();
@@ -21,6 +21,7 @@ app.post('/', async function(req,res) {
 	try{
 		await update(__repodir,username,repo);
 		await bulidDocker(repo);
+		await removeDocker(repo);
 		await runDocker(repo);
 		
 		console.log('done');
