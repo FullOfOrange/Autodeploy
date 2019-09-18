@@ -17,16 +17,17 @@ app.post('/', async function(req,res) {
 	res.send('send success');
 
 	console.log('request drived',req.body.repository.full_name)
+
 	const request = req.body;
 	const [username,repo] = request.repository.full_name.split('/');
 	
-	try{
+	try {
 		await update(__repodir,username,repo);
 		await bulidDocker(repo);
 		await removeDocker(repo);
 		await runDocker(repo);
 		console.log('done');
-	}catch(err){
+	} catch (err) {
 		console.log(`something err: ${err}`);
 	}
 });

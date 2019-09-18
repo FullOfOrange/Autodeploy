@@ -1,3 +1,17 @@
+const {id,pw} = require('../options/userinfo.js');
+/**
+ * id 와 pw에 따른 github auth 를 설정합니다.
+ */
+const userform = () => {
+    if(id === ''){
+        return '';
+    }
+    if(pw === ''){
+        return `${id}@`;
+    }
+    return `${id}:${pw}@`;
+}
+
 const fs = require('fs');
 const git = require('simple-git');
 /**
@@ -27,8 +41,9 @@ const checkDir = (path) => {
 const update = async (path,user,repo) => {
 	try{
 		fs.statSync(path+'/'+repo);
-		await pull(path,repo);
+		await pull(path,user,repo);
 	}catch(err){
+        console.log(err)
 		await clone(path,user,repo);
 	}
 }
@@ -41,7 +56,7 @@ const update = async (path,user,repo) => {
 const clone = (path,user,repo) => {
     return new Promise((resolve,reject) => {
         git(path)
-        .clone(`https://github.com/${user}/${repo}`,repo,(err,data) => {
+        .clone(`https://${userform()}github.com/${user}/${repo}`,repo,(err,data) => {
             if(err) { resolve(err) }
             resolve(data);
         });
@@ -52,10 +67,11 @@ const clone = (path,user,repo) => {
  * @param {String} path 
  * @param {String} repo 
  */
-const pull = (path,repo) => {
+const pull = (path,user,repo) => {
+    console.log('pull');
     return new Promise((resolve,reject) => {
         git(path+'/'+repo)
-        .pull((err,update) => {
+        .pull(`https://${userform()}github.com/${user}/${repo}.git`,'master',(err,update) => {
             if(err) { resolve(err) }
 			if(update && update.summary.changes) { resolve(update) }
 			//for debug;

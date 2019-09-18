@@ -2,9 +2,7 @@ const {__repodir} = require('../options/global.js');
 
 const Docker = require('dockerode');
 const docker = new Docker({socketPath: '/var/run/docker.sock'});
-
 const tar = require('tar-fs');
-
 /**
  * Bulid docker with 'Dockerfile' in repository (path '/')
  * @param {String: repository name} repository 
