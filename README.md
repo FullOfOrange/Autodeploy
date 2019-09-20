@@ -19,13 +19,13 @@ git push를 하면 서버가 repository를 자동으로 clone / pull을 해서 �
 
 ### Centos
 
-**NOTICE: 하단의 명령어는 잘 안될 수 도 있습니다. 직접 수행하시는게 더 나을 수도 있습니다. 모든 명령 및 스크립트는 root 권한에서 실행한다는 가정 하에 개발했습니다.**
+**NOTICE: 하단의 명령어는 잘 안될 수도 있습니다. 직접 수행하시는게 더 나을 수도 있습니다. 모든 명령 및 스크립트는 root 권한에서 실행한다는 가정 하에 개발했습니다.**
 
 ```shell
 yum update -y & yum upgrade -y
 yum install git
 ```
-위의 명령어가 선행되어야 한다. container를 만들고 나면 꼭 위의 명령어를 실행해서 최신 버전으로 만들면 좋다.
+위의 명령어가 선행되어야 한다. EC2 등의 container를 만들고 나면 꼭 위의 명령어를 실행해서 최신 버전으로 만들면 좋다.
 
 ```shell
 git clone "this repository"
@@ -74,7 +74,7 @@ node app.js
 
 ### Dockerfile
 
-https://github.com/FullOfOrange/deploy_test/blob/master/Dockerfile
+https://github.com/FullOfOrange/deploy_test/
 
 예시용 repository를 만들었습니다. 이곳에 있는 Dockerfile에 명시되어있는 주석을 기준으로 작성해주세요.
 
