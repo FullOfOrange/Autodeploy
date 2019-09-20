@@ -1,6 +1,8 @@
 # Autodeploy
 VERSION : 0.1 [UNSTABLE]
 
+NGINX - NODE - Docker
+
 git push를 하면 서버가 repository를 자동으로 clone / pull을 해서 내부의 Dockerfile을 기반으로 서버를 빌드한 후에 3000번 포트로 배포를 해준다.
 
 ## 지원 예정
@@ -68,7 +70,7 @@ node app.js
 
 
 
-###Ubuntu
+### Ubuntu
 
 **아직 설치 스크립트를 제작하지 않았습니다. 상단의 Centos와 동일한 설치 과정을 걸쳐 설치해주세요.**
 
