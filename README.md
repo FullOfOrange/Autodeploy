@@ -110,6 +110,28 @@ EXPOSE 3000
 
 각각의 레포지토리마다 Webhooks가 있다. 설정한 서버의 URL 을 정의해서 /deployment에 연결해주면 된다.
 
+
+
+### Private Repo
+
+private repository 를 위해 옵션 형식으로 아이디와 비밀번호를 줄 수 있다.
+
+./deployserver/options/userinfo.js
+
+```javascript
+mdule.exports = {
+    //github id 와 pw를 넣어주세요.
+    //만약 user info를 넣고싶지 않을경우,
+    //또는 git에 직접적으로 설정하실경우, 아래의 부분을 건들지 말아주세요.
+    id: '',
+    pw: ''
+}
+```
+
+이곳의 ' ' 내에 아이디와 비밀번호를 넣어놓으면 된다. 만약 기여시에 개인정보가 걱정된다면 .gitignore에 이 항목을 추가하세요.
+
+
+
 ## 작동 방식
 
 #### nginx config
