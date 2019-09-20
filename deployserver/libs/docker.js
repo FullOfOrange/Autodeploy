@@ -35,6 +35,7 @@ const runDocker = (repository) => {
 			name: repository
 		},(err, container) => {
 			if(err){
+				console.log(err)
 				reject(err);
 			}
 			container.start();
@@ -52,9 +53,7 @@ const removeDocker = (repository) => {
 		getContainerId(repository).then(id => {
 			if(id){
 				docker.getContainer(id).stop()
-				.then((container)=>{
-					container.remove().then(() => resolve());
-				});
+				docker.getContainer(id).remove().then(() => resolve());
 			}else{
 				resolve();
 			}
@@ -67,15 +66,17 @@ const removeDocker = (repository) => {
  */
 const getContainerId = (repository) => {
 	return new Promise((resolve,reject) => {
-		docker.listContainers((err, containers) => {
+		docker.listContainers({all: true},(err, containers) => {
+			console.log(containers);
 			if(err) {
 				reject(err);
 			}
 			if (containers) {
 				containers.forEach((container) => {
 					let i = container.Names.findIndex((name) => {
-						return name === `/ㅁ${repository}`;
+						return name === `/${repository}`;
 					})
+					console.log(i,typeof i);
 					if(i !== -1){
 						resolve(containers[i].Id)
 					}
