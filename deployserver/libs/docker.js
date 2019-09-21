@@ -52,7 +52,8 @@ const removeDocker = (repository) => {
 	return new Promise((resolve,reject) => {
 		getContainerId(repository).then(id => {
 			if(id){
-				docker.getContainer(id).stop()
+				docker.getContainer(id).stats().then((e) => console.log(e));
+				docker.getContainer(id).stop();
 				docker.getContainer(id).remove().then(() => resolve());
 			}else{
 				resolve();
