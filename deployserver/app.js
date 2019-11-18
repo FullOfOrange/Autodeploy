@@ -8,8 +8,11 @@ const docker = new Docker({
   	port: process.env.DOCKER_PORT || 2375,
 });
 
-app.use(express.json());
+docker.listContainers((e) => {
+	console.log(e);
+})
 
+app.use(express.json());
 app.get('/', async function(req,res) {});
 
 app.listen(PORT, function() {
