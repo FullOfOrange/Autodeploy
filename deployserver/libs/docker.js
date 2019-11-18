@@ -1,90 +1,9 @@
-const {__repodir} = require('../options/global.js');
-
 const Docker = require('dockerode');
-const docker = new Docker({socketPath: '/var/run/docker.sock'});
-const tar = require('tar-fs');
-/**
- * Bulid docker with 'Dockerfile' in repository (path '/')
- * @param {String: repository name} repository 
- */
-const bulidDocker = (repository) => {
-	const pack = tar.pack(__repodir+'/'+repository);
-	return new Promise((resolve,reject) => {
-		docker.buildImage(
-			pack, {t: repository}, function(err, stream) {
-			if (err) {
-				reject(err);
-			}
-			stream.pipe(process.stdout, {end: true});
-			stream.on('end', () => {
-				resolve();
-			});
-		});
-	});
-}
-/**
- * Run docker with 3000 port
- * @param {String: repository name} repository 
- */
-const runDocker = (repository) => {
-	return new Promise((resolve,reject) => {
-		docker.createContainer({
-			Image:repository,
-			Tty:false,
-			PortBindings: { "3000/tcp": [{ "HostPort": "3000" }] },
-			name: repository
-		},(err, container) => {
-			if(err){
-				console.log(err)
-				reject(err);
-			}
-			container.start();
-			resolve(container);
-		});
-	})
-}
-/**
- * Remove docker container by repository name
- * if container is not exist, this 
- * @param {String: repository name} repository 
- */
-const removeDocker = (repository) => {
-	return new Promise((resolve,reject) => {
-		getContainerId(repository).then(id => {
-			if(id){
-				docker.getContainer(id).stats().then((e) => console.log(e));
-				docker.getContainer(id).stop();
-				docker.getContainer(id).remove().then(() => resolve());
-			}else{
-				resolve();
-			}
-		});
-	});
-}
-/**
- * Get container id by repository name
- * @param {String: repository name} repository 
- */
-const getContainerId = (repository) => {
-	return new Promise((resolve,reject) => {
-		docker.listContainers({all: true},(err, containers) => {
-			console.log(containers);
-			if(err) {
-				reject(err);
-			}
-			if (containers) {
-				containers.forEach((container) => {
-					let i = container.Names.findIndex((name) => {
-						return name === `/${repository}`;
-					})
-					console.log(i,typeof i);
-					if(i !== -1){
-						resolve(containers[i].Id)
-					}
-				})
-			}
-			resolve(null);
-		})
-	});
-}
-module.exports = { bulidDocker, removeDocker ,runDocker };
+const docker = new Docker({
+	host: '192.168.1.10',
+  	port: process.env.DOCKER_PORT || 2375,
+});
+
+
+
+module.exports = {  };
