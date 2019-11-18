@@ -4,6 +4,4 @@ const docker = new Docker({
   	port: process.env.DOCKER_PORT || 2375,
 });
 
-
-
-module.exports = {  };
+module.exports = {};
