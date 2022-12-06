@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "dockerode": "^2.5.8",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "simple-git": "^1.126.0",
     "tar-fs": "^2.0.0"
   }
